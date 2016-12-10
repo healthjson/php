@@ -1,5 +1,4 @@
-Health
-######
+# Health
 
 ![Travis CI](https://travis-ci.org/potfur/health-json.svg?branch=master "Travis CI")
 
@@ -14,7 +13,7 @@ And this is where **Health** comes on stage.
 **Health** is an implementation of [Health JSON Schema](healthjson.org) which standardises responses structure for monitoring endpoints.
 
 
-# How to use
+## How to use
 
 Create instance of `Health` where all services requiring monitoring will be registered
 
@@ -47,5 +46,35 @@ $state = $health->state();
 $state->isHealthy();  // returns true if all services are working
 $state->summary(); // returns array with detailed information about all registered services
 ```
+## Example
 
-Both methods can be filtered for all services or essential only.
+In Symfony, for example 
+ - `/ping` endpoint that returns 200 when essential services are working properly and 500 otherwise,
+ - `/health` endpoint that shows summary for all services, response status code is reflectin its health
+
+```php
+class HealthController extends Controller
+{
+    /**
+     * @Route("/ping", name="health_ping")
+     */
+    public function pingAction(): Response
+    {
+        return (new Response())->setStatusCode($this->get('health')->status()->isHealthy(true) ? 200 : 500);
+    }
+
+    /**
+     * @Route("/health", name="health_summary")
+     */
+    public function healthAction(string $sku): Response
+    {
+        $status = $this->get('health')->status();
+
+        $response = new JsonResponse();
+        $response->setData($status->summary());
+        $response->setStatusCode($status->isHealthy() ? 200 : 500);
+
+        return $response;
+    }
+}
+```

@@ -1,0 +1,29 @@
+{
+  "name": "potfur/healthjson-php",
+  "description": "Health JSON Schema implementation",
+  "type": "library",
+  "license": "MIT",
+  "config": {
+    "bin-dir": "bin"
+  },
+  "autoload": {
+    "psr-4": {
+      "": "src/"
+    }
+  },
+  "require": {
+    "php": "^7.1"
+  },
+  "require-dev": {
+    "phpspec/phpspec": "^3.2",
+    "phpunit/phpunit": "^5.7"
+  },
+  "scripts": {
+    "test": [
+      "@composer install",
+      "bin/phpspec run -c phpspec.yml.dist -f dot",
+      "bin/phpunit -c phpunit.xml.dist --testsuite unit",
+      "bin/phpunit -c phpunit.xml.dist --testsuite functional"
+    ]
+  }
+}

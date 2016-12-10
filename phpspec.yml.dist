@@ -1,0 +1,6 @@
+suites:
+  health:
+    namespace: Health
+    spec_prefix: spec
+    spec_path: %paths.config%/tests
+    src_path: %paths.config%/src
